@@ -5,7 +5,6 @@ ARG SAMBA_VERSION=4.8.0rc3
 ARG S6_VERSION=1.21.2.2
 
 RUN set -ex; \
-    echo 'Acquire::http { Proxy "http://10.0.0.10:3142"; };' > /etc/apt/apt.conf.d/00aptproxy ;\    
     sed -i -r 's/^# *(deb.*)$/\1/' /etc/apt/sources.list ;\
     BUILD_DEPS='bison \
       debhelper  \
