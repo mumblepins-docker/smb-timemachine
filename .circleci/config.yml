@@ -21,30 +21,30 @@ jobs:
           keys:
             - v1-{{ .Branch }}
           paths:
-            - /caches/$IMAGE_NAME.tar
+            - /caches/app.tar
       - run:
           name: Load Docker image layer cache
           command: |
             set +o pipefail
-            docker load -i /caches/$IMAGE_NAME.tar | true
+            docker load -i /caches/app.tar | true
       - run:
           name: Build application Docker image
           command: |
             VERSION="$(cat VERSION | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
-            docker build --cache-from=$IMAGE_NAME \
+            docker build --cache-from=app \
               --build-arg VCS_REF=$(git rev-parse --short HEAD) \
               --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
               --build-arg VERSION="$VERSION" \
-              -t "$IMAGE_NAME" .
+              -t app .
       - run:
           name: Save Docker image layer cache
           command: |
             mkdir -p /caches
-            docker save -o /caches/$IMAGE_NAME.tar $IMAGE_NAME
+            docker save -o /caches/app.tar app
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
-            - /caches/$IMAGE_NAME.tar
+            - /caches/app.tar
       #- run:
       #    name: Run tests
       #    command: |
@@ -54,10 +54,10 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               VERSION="$(cat VERSION | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
-              docker tag $IMAGE_NAME "$DOCKER_USERNAME/$IMAGE_NAME:$VERSION"
-              docker tag $IMAGE_NAME "$DOCKER_USERNAME/$IMAGE_NAME:latest"
+              docker tag app "$DOCKER_USERNAME/$IMAGE_NAME:$VERSION"
+              docker tag app "$DOCKER_USERNAME/$IMAGE_NAME:latest"
               docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
               
-              docker push $IMAGE_NAME "$DOCKER_USERNAME/$IMAGE_NAME:$VERSION"
-              docker tag $IMAGE_NAME "$DOCKER_USERNAME/$IMAGE_NAME:latest"
+              docker push "$DOCKER_USERNAME/$IMAGE_NAME:$VERSION"
+              docker push "$DOCKER_USERNAME/$IMAGE_NAME:latest"
             fi
