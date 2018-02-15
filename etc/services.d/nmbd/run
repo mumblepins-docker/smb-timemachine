@@ -1,0 +1,2 @@
+#!/usr/bin/execlineb -P
+/usr/sbin/nmbd  --foreground --no-process-group "$NMBDOPTIONS"

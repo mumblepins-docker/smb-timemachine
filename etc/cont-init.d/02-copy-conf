@@ -1,0 +1,3 @@
+#!/usr/bin/execlineb -P
+
+cp -avn /smb.conf /etc/samba/

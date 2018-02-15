@@ -1,0 +1,10 @@
+#!/usr/bin/with-contenv bash
+
+smbpasswd -L -a -n timemachine
+smbpasswd -L -e -n timemachine
+
+if [ -z "$SMBPASSWD" ]; then
+  smbpasswd -L -n timemachine
+else
+  echo -e "$SMBPASSWD\n$SMBPASSWD" | smbpasswd -L -s timemachine
+fi

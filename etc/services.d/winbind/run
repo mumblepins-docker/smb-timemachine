@@ -1,0 +1,2 @@
+#!/usr/bin/execlineb -P
+/usr/sbin/winbindd  --foreground --no-process-group "$WINBINDOPTIONS"
