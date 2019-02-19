@@ -25,5 +25,14 @@ VOLUME ["/time-capsule", "/etc/samba"]
 
 ENV SMBPASSWD=tmpass
 
+ARG BUILD_DATE
+ARG VCS_REF
+
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name="SMB TimeMachine" \
+      org.label-schema.description="Builds Samba for use as a time capsule for time machine.  Supports the various vfs_fruit attributes to allow compatibility with newer versions of OS X." \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/mumblepins-docker/smb-timemachine" \
+      org.label-schema.schema-version="1.0"
 ENTRYPOINT ["/init"]
 

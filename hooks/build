@@ -1,10 +1,8 @@
 #!/bin/bash
 # $IMAGE_NAME var is injected into the build so the tag is correct.
 set -xe
-VERSION="$(cat VERSION | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
 
 docker build \
     --build-arg VCS_REF=$(git rev-parse --short HEAD) \
     --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
-    --build-arg VERSION="$VERSION" \
     -t "$IMAGE_NAME" .
